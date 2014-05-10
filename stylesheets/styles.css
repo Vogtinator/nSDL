@@ -797,7 +797,7 @@ header p {
 
 section {
   width: 590px;
-  padding: 30px 0 0 0;
+  padding: 30px 10px 0 10px;
   margin: 20px 0;
   margin-top: 50px;
   position: relative;
@@ -899,7 +899,7 @@ footer {
     /*border: 1px solid #e5e5e5;
     border-width: 1px 0;*/
     padding: 20px auto;
-    margin: 170px auto 20px;
+    margin: 50px auto 20px;
     max-width: 600px;
   }
 
@@ -934,7 +934,7 @@ footer {
   }
 
   #banner {
-    top: 80px;
+    top: 0;
   }
   #banner .fork {
     float: left;
@@ -945,7 +945,7 @@ footer {
   }
 
   section {
-    margin-top: 130px;
+    margin-top: 50px;
     margin-bottom: 0px;
     width: auto;
   }
