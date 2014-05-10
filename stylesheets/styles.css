@@ -320,7 +320,11 @@ nav ol {
  *    code.flickr.com/blog/2008/11/12/on-ui-quality-the-little-things-client-side-image-resizing/
  */
 img {
-  border: 0;
+  border: 1px #fefefe solid;
+  padding: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   /* 1 */
   -ms-interpolation-mode: bicubic;
   /* 2 */
