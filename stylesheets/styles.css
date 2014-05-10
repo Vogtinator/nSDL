@@ -793,9 +793,9 @@ header p {
 
 section {
   width: 590px;
-  padding: 30px 0 30px 0;
+  padding: 30px 0 0 0;
   margin: 20px 0;
-  margin-top: 40px;
+  margin-top: 50px;
   position: relative;
   background: #ffffff;
   /*-moz-border-radius: 3px;
