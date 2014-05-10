@@ -503,9 +503,9 @@ table {
 }
 
 body {
-  font: 16px/22px "Quattrocento Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 16px/26px "Quattrocento Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #666;
-  font-weight: 300;
+  font-weight: 100;
   margin: 0px;
   padding: 0px 0 20px 0px;
   background: #ffffff;
