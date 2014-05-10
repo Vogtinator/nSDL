@@ -55,11 +55,24 @@
 <a href="https://github.com/Hoffa/nSDL/wiki/Additional-libraries">SDL_image</a> and <a href="https://github.com/Hoffa/nSDL/wiki/Additional-libraries">SDL_gfx</a> available.</li>
 </ul>
 
-<h3><a name="helloworld" class="anchor" href="#helloworld"><span class="octicon octicon-link"></span></a>Hello, World!</h3>
-<pre class="prettyprint">
+<h3><a name="helloworld" class="anchor" href="#helloworld"><span class="octicon octicon-link"></span></a>Example</h3>
+<pre class="prettyprint" style="font-size:15px;line-height:20px">
+#include &lt;os.h&gt;
 #include &lt;SDL/SDL.h&gt;
 
-int main(int argc, char **argv) {
+SDL_Surface *screen;
+nSDL_Font *font;
+
+int main(void) {
+    SDL_Init(SDL_INIT_VIDEO);
+    screen = SDL_SetVideoMode(320, 240, NSDL_DISPLAY_BPP, SDL_SWSURFACE);
+    font = nSDL_LoadFont(NSDL_FONT_TINYTYPE, 255, 255, 255);
+    SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 255, 45, 85));
+    nSDL_DrawString(screen, font, 10, 10, "Hello, world!");
+    SDL_Flip(screen);
+    SDL_Delay(3000);
+    nSDL_FreeFont(font);
+    SDL_Quit();
     return 0;
 }
 </pre>
