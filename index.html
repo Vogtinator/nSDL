@@ -7,8 +7,6 @@
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/default.min.css">
-    <script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
     <script src="javascripts/main.js"></script>
     <!--[if lt IE 9]>
@@ -56,33 +54,6 @@
 <li>
 <a href="https://github.com/Hoffa/nSDL/wiki/Additional-libraries">SDL_image</a> and <a href="https://github.com/Hoffa/nSDL/wiki/Additional-libraries">SDL_gfx</a> available.</li>
 </ul>
-
-<h3><a name="helloworld" class="anchor" href="#helloworld"><span class="octicon octicon-link"></span></a>Example</h3>
-<pre>
-<code>
-#include &lt;os.h&gt;
-#include &lt;SDL/SDL.h&gt;
-
-SDL_Surface *screen;
-nSDL_Font *font;
-
-int main(void) {
-    /* Initialize SDL
-    SDL_Init(SDL_INIT_VIDEO);
-    screen = SDL_SetVideoMode(320, 240, is_cx ? 16 : 8, SDL_SWSURFACE);
-    font = nSDL_LoadFont(NSDL_FONT_TINYTYPE, 255, 255, 255);
-
-    SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 255, 45, 85));
-    nSDL_DrawString(screen, font, 10, 10, "Hello, world!");
-    SDL_Flip(screen);
-    SDL_Delay(3000);
-
-    nSDL_FreeFont(font);
-    SDL_Quit();
-    return 0;
-}
-</code>
-</pre>
 
 <h3><a name="screenshots" class="anchor" href="#screenshots"><span class="octicon octicon-link"></span></a>Screenshots</h3>
 
