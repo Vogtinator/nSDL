@@ -70,7 +70,7 @@ Uint32 SDL_GetTicks (void)
 
 void SDL_Delay (Uint32 ms)
 {
-	sleep(ms);
+	msleep(ms);
 }
 
 #include "SDL_thread.h"
