@@ -125,7 +125,7 @@ static SDL_Rect **NSP_ListModes(_THIS, SDL_PixelFormat *format, Uint32 flags)
 static SDL_Surface *NSP_SetVideoMode(_THIS, SDL_Surface *current,
 				     int width, int height, int bpp, Uint32 flags)
 {
-	Uint32 rmask, gmask, bmask;
+	Uint32 rmask, gmask, bmask, buffer2size;
 
 	NSP_DEBUG("Initializing display (%dx%dx%d)", width, height, bpp);
 
@@ -158,8 +158,10 @@ static SDL_Surface *NSP_SetVideoMode(_THIS, SDL_Surface *current,
 		SDL_free( this->hidden->buffer );
 	}
 
-
-	this->hidden->buffer2 = SDL_malloc((bpp / 8) * SCREEN_WIDTH * SCREEN_HEIGHT);
+	buffer2size = this->hidden->cx
+	            ? (SCREEN_WIDTH * SCREEN_HEIGHT * 2)
+	            : (SCREEN_WIDTH * SCREEN_HEIGHT / 2);
+	this->hidden->buffer2 = SDL_malloc(buffer2size);
 	if ( ! this->hidden->buffer2 ) {
 		SDL_SetError("Couldn't allocate buffer2 for requested mode");
 		return(NULL);
@@ -172,7 +174,7 @@ static SDL_Surface *NSP_SetVideoMode(_THIS, SDL_Surface *current,
 		return(NULL);
 	}
 
-	memset(this->hidden->buffer2, 0, (bpp / 8) * SCREEN_WIDTH * SCREEN_HEIGHT);
+	memset(this->hidden->buffer2, 0, buffer2size);
 	memset(this->hidden->buffer, 0, (bpp / 8) * width * height);
 
 	/* Allocate the new pixel format for the screen */
