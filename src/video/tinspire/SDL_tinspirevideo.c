@@ -253,8 +253,6 @@ static void NSP_UpdateRects(_THIS, int numrects, SDL_Rect *rects)
 						*(Uint16 *)(dst_addr + j) = nsp_palette[src_addr[k]];
 				);
 			}
-
-			lcd_blit(this->hidden->buffer2, SCR_320x240_565);
 		} else {
 			/* 8 bpp SW, 4 bpp HW */
 			NSP_DRAW_LOOP(
@@ -267,10 +265,11 @@ static void NSP_UpdateRects(_THIS, int numrects, SDL_Rect *rects)
 				if ( odd_right )
 					dst_addr[k] = (nsp_palette[src_addr[j]] << 4) | (dst_addr[k] & 0x0f);
 			);
-
-			lcd_blit(this->hidden->buffer2, SCR_320x240_4);
 		}
 	}
+
+	if ( numrects != 0 )
+		lcd_blit(this->hidden->buffer2, this->hidden->cx ? SCR_320x240_565 : SCR_320x240_4);
 }
 
 #define NSP_MAP_RGB(r, g, b)	(this->hidden->cx ? (((r / 8) << 11) | ((g / 4) << 5) | (b / 8)) \
