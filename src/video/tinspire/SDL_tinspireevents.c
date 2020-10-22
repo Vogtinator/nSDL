@@ -36,6 +36,8 @@ static Uint8 key_state[NSP_NUMKEYS];
 static SDLKey sdlak_keymap[4] = {SDLK_UP, SDLK_RIGHT, SDLK_DOWN, SDLK_LEFT};
 static Uint8 arrow_key_state[4];
 
+static BOOL mouse_is_clicked = 0;
+
 static void nsp_update_keyboard(void)
 {
 	int i;
@@ -65,8 +67,41 @@ static void nsp_update_arrow_keys(void)
 		NSP_UPDATE_KEY_EVENT(sdlak_keymap[i], i, arrow_key_state[i], arrow_key_pressed[i]);
 }
 
+
+static void nsp_update_mouse_click(void)
+{
+	BOOL key_pressed;
+	key_pressed = isKeyPressed(KEY_NSPIRE_CLICK) || isKeyPressed(KEY_NSPIRE_SCRATCHPAD);
+
+	if (!key_pressed && mouse_is_clicked) {
+		mouse_is_clicked = 0;
+		SDL_PrivateMouseButton(0, 1, 0, 0);
+	}
+	else if (key_pressed) {
+		mouse_is_clicked = 1;
+		SDL_PrivateMouseButton(1, 1, 0, 0);
+	}
+}
+
+static void nsp_update_mouse(void)
+{
+	touchpad_report_t tp;
+	Sint8 dx, dy;
+
+	touchpad_scan(&tp);
+
+	if (tp.proximity) {
+		dx = (Sint8)tp.x_velocity;
+		dy = -((Sint8)tp.y_velocity);
+		SDL_PrivateMouseMotion(0, 1, dx, dy);
+	}
+}
+
 void NSP_PumpEvents(_THIS)
 {
+	nsp_update_mouse();
+	nsp_update_mouse_click();
+
 	nsp_update_keyboard();
 	nsp_update_arrow_keys();
 }
