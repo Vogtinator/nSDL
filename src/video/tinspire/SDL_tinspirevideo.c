@@ -161,12 +161,14 @@ static SDL_Surface *NSP_SetVideoMode(_THIS, SDL_Surface *current,
 	buffer2size = this->hidden->cx
 	            ? (SCREEN_WIDTH * SCREEN_HEIGHT * 2)
 	            : (SCREEN_WIDTH * SCREEN_HEIGHT / 2);
+	SDL_free(this->hidden->buffer2);
 	this->hidden->buffer2 = SDL_malloc(buffer2size);
 	if ( ! this->hidden->buffer2 ) {
 		SDL_SetError("Couldn't allocate buffer2 for requested mode");
 		return(NULL);
 	}
 
+	SDL_free(this->hidden->buffer);
 	this->hidden->buffer = SDL_malloc((bpp / 8) * width * height);
 	if ( ! this->hidden->buffer ) {
 		SDL_free(this->hidden->buffer2);
