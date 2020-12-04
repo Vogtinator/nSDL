@@ -288,6 +288,10 @@ static int NSP_SetColors(_THIS, int firstcolor, int ncolors, SDL_Color *colors)
 */
 static void NSP_VideoQuit(_THIS)
 {
+	SDL_free(this->hidden->buffer);
+	this->hidden->buffer = NULL;
+	SDL_free(this->hidden->buffer2);
+	this->hidden->buffer2 = NULL;
 	NSP_DEBUG("Closing video");
 	lcd_init(SCR_TYPE_INVALID);
 }
