@@ -155,6 +155,7 @@ static SDL_Surface *NSP_SetVideoMode(_THIS, SDL_Surface *current,
 		rmask = gmask = bmask = 0;
 
 	if ( this->hidden->buffer ) {
+		// FIXME: If this function fails later, the old SDL_Surface is dangling
 		SDL_free( this->hidden->buffer );
 	}
 
@@ -168,10 +169,10 @@ static SDL_Surface *NSP_SetVideoMode(_THIS, SDL_Surface *current,
 		return(NULL);
 	}
 
-	SDL_free(this->hidden->buffer);
 	this->hidden->buffer = SDL_malloc((bpp / 8) * width * height);
 	if ( ! this->hidden->buffer ) {
 		SDL_free(this->hidden->buffer2);
+		this->hidden->buffer2 = NULL;
 		SDL_SetError("Couldn't allocate buffer for requested mode");
 		return(NULL);
 	}
@@ -188,7 +189,7 @@ static SDL_Surface *NSP_SetVideoMode(_THIS, SDL_Surface *current,
 	}
 
 	/* Set up the new mode framebuffer */
-	current->flags = flags;
+	current->flags = flags | SDL_PREALLOC;
 	this->hidden->w = this->info.current_w = current->w = width;
 	this->hidden->h = this->info.current_h = current->h = height;
 	current->pitch = (bpp / 8) * current->w;
