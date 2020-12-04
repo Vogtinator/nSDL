@@ -125,7 +125,7 @@ static SDL_Rect **NSP_ListModes(_THIS, SDL_PixelFormat *format, Uint32 flags)
 static SDL_Surface *NSP_SetVideoMode(_THIS, SDL_Surface *current,
 				     int width, int height, int bpp, Uint32 flags)
 {
-	Uint32 rmask, gmask, bmask;
+	Uint32 rmask, gmask, bmask, buffer2size;
 
 	NSP_DEBUG("Initializing display (%dx%dx%d)", width, height, bpp);
 
@@ -158,13 +158,17 @@ static SDL_Surface *NSP_SetVideoMode(_THIS, SDL_Surface *current,
 		SDL_free( this->hidden->buffer );
 	}
 
-
-	this->hidden->buffer2 = SDL_malloc((bpp / 8) * SCREEN_WIDTH * SCREEN_HEIGHT);
+	buffer2size = this->hidden->cx
+	            ? (SCREEN_WIDTH * SCREEN_HEIGHT * 2)
+	            : (SCREEN_WIDTH * SCREEN_HEIGHT / 2);
+	SDL_free(this->hidden->buffer2);
+	this->hidden->buffer2 = SDL_malloc(buffer2size);
 	if ( ! this->hidden->buffer2 ) {
 		SDL_SetError("Couldn't allocate buffer2 for requested mode");
 		return(NULL);
 	}
 
+	SDL_free(this->hidden->buffer);
 	this->hidden->buffer = SDL_malloc((bpp / 8) * width * height);
 	if ( ! this->hidden->buffer ) {
 		SDL_free(this->hidden->buffer2);
@@ -172,7 +176,7 @@ static SDL_Surface *NSP_SetVideoMode(_THIS, SDL_Surface *current,
 		return(NULL);
 	}
 
-	memset(this->hidden->buffer2, 0, (bpp / 8) * SCREEN_WIDTH * SCREEN_HEIGHT);
+	memset(this->hidden->buffer2, 0, buffer2size);
 	memset(this->hidden->buffer, 0, (bpp / 8) * width * height);
 
 	/* Allocate the new pixel format for the screen */
@@ -251,8 +255,6 @@ static void NSP_UpdateRects(_THIS, int numrects, SDL_Rect *rects)
 						*(Uint16 *)(dst_addr + j) = nsp_palette[src_addr[k]];
 				);
 			}
-
-			lcd_blit(this->hidden->buffer2, SCR_320x240_565);
 		} else {
 			/* 8 bpp SW, 4 bpp HW */
 			NSP_DRAW_LOOP(
@@ -265,10 +267,11 @@ static void NSP_UpdateRects(_THIS, int numrects, SDL_Rect *rects)
 				if ( odd_right )
 					dst_addr[k] = (nsp_palette[src_addr[j]] << 4) | (dst_addr[k] & 0x0f);
 			);
-
-			lcd_blit(this->hidden->buffer2, SCR_320x240_4);
 		}
 	}
+
+	if ( numrects != 0 )
+		lcd_blit(this->hidden->buffer2, this->hidden->cx ? SCR_320x240_565 : SCR_320x240_4);
 }
 
 #define NSP_MAP_RGB(r, g, b)	(this->hidden->cx ? (((r / 8) << 11) | ((g / 4) << 5) | (b / 8)) \
@@ -287,6 +290,10 @@ static int NSP_SetColors(_THIS, int firstcolor, int ncolors, SDL_Color *colors)
 */
 static void NSP_VideoQuit(_THIS)
 {
+	SDL_free(this->hidden->buffer);
+	this->hidden->buffer = NULL;
+	SDL_free(this->hidden->buffer2);
+	this->hidden->buffer2 = NULL;
 	NSP_DEBUG("Closing video");
 	lcd_init(SCR_TYPE_INVALID);
 }
